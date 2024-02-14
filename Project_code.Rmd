@@ -1,6 +1,8 @@
 ---
 title: "Project 1"
-output: powerpoint_presentation
+output:
+  beamer_presentation: default
+  powerpoint_presentation: default
 date: "2024-02-14"
 ---
 
@@ -8,27 +10,163 @@ date: "2024-02-14"
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
+# R Markdown
 
 This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
-## Slide with Bullets
+# Slide with Bullets
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+-   Bullet 1
+-   Bullet 2
+-   Bullet 3
 
-## Slide with R Output
+# Slide with R Output
 
-```{r cars, echo = TRUE}
+```{r} 
 summary(cars)
 ```
 
-## Slide with Plot
+# Slide with Plot
 
-```{r pressure}
-plot(pressure)
+```{r}
+plot(pressure) 
+plot(iris$Petal.Length, iris$Sepal.Width)
 ```
 
+
+
+
+# was there a slide created? 
+<!-- Load the Dataset
+For instance, If you're using a sample dataset like "mtcars," load it using data(mtcars)
+
+Or if you are using a CSV dataset in R, you can use the ‘read.csv’ function, which is part of the base R package.
+
+data <- read.csv("your_file_path.csv")
+ 
+
+Create at least four different types of ggplot visualizations for the selected variables:
+Example, If applicable:
+
+Create a histogram to visualize the distribution of the selected numeric variable. You are encouraged to experiment with bin sizes and labels.
+Create a box plot to visualize the median, quartiles, and potential outliers of the selected numeric variable.
+Create a density plot to visualize the probability density of the selected numeric variable.
+Create a bar plot to visualize the count distribution of the selected categorical variable.
+ 
+
+Prepare a write-up accompanying your codes, describe the insights you've gained from each plot. -->
+ 
+# Load the Dataset
+```{r include=TRUE}
+data = read.csv("./Data/API_SI.POV.DDAY_DS2_en_csv_v2_2756.csv")
+
+# Remove the columns 'Indicator.Name'  and 'Indicator.Code' since it doesn't contain any useful information
+data = data[, !(colnames(data) %in% c("Indicator.Name", "Indicator.Code"))]
+colnames(data)
+head(data)
+
+```
+
+
+
+# create a plot of the for USAs
+```{r include=TRUE}
+library(ggplot2)
+library(reshape2)
+#install.packages("dplyr")
+library(dplyr)
+
+# Note, we want to plot x=year and y=Poverty ratio
+# Years are part of the columns(starts with X followed by a number ) of the dataset. We need to convert all this years into a single column
+# Poverty ratio is its own column
+# Data for the usa is in the row with the country code "USA". Under the column "Country.Code"
+
+long_data = melt(data, id.vars = c("Country.Name", "Country.Code"),
+                  variable.name = "Year", value.name = "PovertyRatio")
+
+colnames(long_data)
+head(long_data)
+```
+
+```{r include=TRUE}
+
+# Convert 'Year' from a character to an integer, remove 'X' prefix convert
+long_data$Year = as.integer(gsub("^X", "", long_data$Year))
+
+# Filter the data for the USA
+usa_data = filter(long_data, `Country.Code` == "USA")
+
+# Plot the data
+ggplot(usa_data, aes(x = Year, y = PovertyRatio)) +
+  geom_line() + # Use geom_line() for a line plot
+  labs(title = "Poverty Ratio Over the Years in the USA",
+       x = "Year",
+       y = "Poverty Ratio")
+
+
+```
+
+
+# plot the data for all the countries
+
+```{r include=TRUE}
+# Plot the data for all the countries
+ggplot(long_data, aes(x = Year, y = PovertyRatio)) +
+  geom_line(aes(group = Country.Name)) + # Use geom_line() for a line plot
+  labs(title = "Poverty Ratio Over the Years",
+       x = "Year",
+       y = "Poverty Ratio")
+
+# Plot the average poverty ratio over the years for each country in a bar plot 
+ggplot(long_data, aes(x = Year, y = PovertyRatio)) +
+  geom_line(stat = "summary", fun = "mean") +
+  labs(title = "Average Poverty Ratio Over the Years",
+       x = "Year",
+       y = "Average Poverty Ratio")
+
+
+```
+
+
+# Create a histogram to visualize the distribution of the selected numeric variable. You are encouraged to experiment with bin sizes and labels.
+
+```{r include=TRUE}
+# Create a histogram to visualize the distribution of the selected numeric variable. You are encouraged to experiment with bin sizes and labels. 
+ggplot(long_data, aes(x = PovertyRatio)) +
+  geom_histogram(binwidth = 0.5, fill = "blue", color = "black") +
+  labs(title = "Poverty Ratio Distribution",
+       x = "Poverty Ratio",
+       y = "Frequency")
+
+# Look at the historgram but only for year 2020+
+year_2020_plus  = filter(long_data, Year >= 2000)
+# Remove outliers, values that Poverty.Ration > 10 
+#year_2020_plus = filter(year_2020_plus, PovertyRatio <= 10)
+ggplot(year_2020_plus, aes(x = PovertyRatio)) +
+  geom_histogram(binwidth = 0.06, fill = "red", color = "black") +
+  labs(title = "Poverty Ratio Distribution for 2000+",
+       x = "Poverty Ratio",
+       y = "Frequency")
+
+
+```
+
+
+# Create a box plot to visualize the median, quartiles, and potential outliers of the selected numeric variable.
+
+```{r include=TRUE}
+# Create a box plot to visualize the median, quartiles, and potential outliers of the selected numeric variable.
+ggplot(long_data, aes(x = Year, y = PovertyRatio)) +
+  geom_boxplot(fill = "lightblue",) +
+  labs(title = "Poverty Ratio Boxplot",
+       x = "",
+       y = "Poverty Ratio")
+
+
+```
+
+
+
+ 
