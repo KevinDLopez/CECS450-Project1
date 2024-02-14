@@ -1,8 +1,8 @@
 ---
 title: "Project 1"
 output:
-  beamer_presentation: default
   powerpoint_presentation: default
+  beamer_presentation: default
 date: "2024-02-14"
 ---
 
@@ -10,6 +10,8 @@ date: "2024-02-14"
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+
+<!-- ############### R markdown introduction  ############### --> 
 # R Markdown
 
 This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
@@ -35,10 +37,14 @@ plot(pressure)
 plot(iris$Petal.Length, iris$Sepal.Width)
 ```
 
+<!-- ############### R markdown introduction - done  ############### --> 
 
 
 
-# was there a slide created? 
+
+
+
+
 <!-- Load the Dataset
 For instance, If you're using a sample dataset like "mtcars," load it using data(mtcars)
 
@@ -58,7 +64,7 @@ Create a bar plot to visualize the count distribution of the selected categorica
 
 Prepare a write-up accompanying your codes, describe the insights you've gained from each plot. -->
  
-# Load the Dataset
+# Load the Dataset 
 ```{r include=TRUE}
 data = read.csv("./Data/API_SI.POV.DDAY_DS2_en_csv_v2_2756.csv")
 
@@ -71,7 +77,7 @@ head(data)
 
 
 
-# create a plot of the for USAs
+# Convert data to long format
 ```{r include=TRUE}
 library(ggplot2)
 library(reshape2)
