@@ -11,38 +11,6 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-<!-- ############### R markdown introduction  ############### --> 
-# R Markdown
-
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
-
-# Slide with Bullets
-
--   Bullet 1
--   Bullet 2
--   Bullet 3
-
-# Slide with R Output
-
-```{r} 
-summary(cars)
-```
-
-# Slide with Plot
-
-```{r}
-plot(pressure) 
-plot(iris$Petal.Length, iris$Sepal.Width)
-```
-
-<!-- ############### R markdown introduction - done  ############### --> 
-
-
-
-
-
 
 
 <!-- Load the Dataset
@@ -64,114 +32,81 @@ Create a bar plot to visualize the count distribution of the selected categorica
 
 Prepare a write-up accompanying your codes, describe the insights you've gained from each plot. -->
  
+ 
+ 
+# Explain the dataset
+The dataset is a travel insurance dataset. It contains information travelers and whether they purchased travel insurance or not and other information (age, income, Employment, etc). 
+The dataset contains 10 columns and 1986 rows of information. The columns are:
+idx	Age	Employment Type	GraduateOrNot	AnnualIncome	FamilyMembers	ChronicDiseases	FrequentFlyer	EverTravelledAbroad	TravelInsurance
+
+Age- Age Of The Customer
+Employment Type- The Sector In Which Customer Is Employed
+GraduateOrNot- Whether The Customer Is College Graduate Or Not
+AnnualIncome- The Yearly Income Of The Customer In Indian Rupees[Rounded To Nearest 50 Thousand Rupees]
+FamilyMembers- Number Of Members In Customer's Family
+ChronicDisease- Whether The Customer Suffers From Any Major Disease Or Conditions Like Diabetes/High BP or Asthama,etc.
+FrequentFlyer- Derived Data Based On Customer's History Of Booking Air Tickets On Atleast 4 Different Instances In The Last 2 Years[2017-2019].
+EverTravelledAbroad- Has The Customer Ever Travelled To A Foreign Country[Not Necessarily Using The Company's Services]
+TravelInsurance- Did The Customer Buy Travel Insurance Package During Introductory Offering Held In The Year 2019.
+
+
 # Load the Dataset 
 ```{r include=TRUE}
-data = read.csv("./Data/API_SI.POV.DDAY_DS2_en_csv_v2_2756.csv")
+data = read.csv("./TravelInsurancePrediction.csv")
 
-# Remove the columns 'Indicator.Name'  and 'Indicator.Code' since it doesn't contain any useful information
-data = data[, !(colnames(data) %in% c("Indicator.Name", "Indicator.Code"))]
 colnames(data)
 head(data)
 
 ```
 
 
+# reshaping data 
+Data is already in long format. 
+Data for income is given in Indian Rupees. We will create a new column to convert it to USD. Column name will be AnnualIncomeUSD
+```{r include=TRUE}
+RUPEE_TO_USD = 0.012
+# add a new column for income in USD
+data$AnnualIncomeUSD <- data$AnnualIncome * RUPEE_TO_USD
+head(data)
 
-# Convert data to long format
+```
+
+# Graph 2 - Age/Income
 ```{r include=TRUE}
 library(ggplot2)
 library(reshape2)
-#install.packages("dplyr")
-library(dplyr)
 
-# Note, we want to plot x=year and y=Poverty ratio
-# Years are part of the columns(starts with X followed by a number ) of the dataset. We need to convert all this years into a single column
-# Poverty ratio is its own column
-# Data for the usa is in the row with the country code "USA". Under the column "Country.Code"
+ggplot(data, aes(x = Age, y = AnnualIncomeUSD)) +
+  geom_point(aes(color = TravelInsurance)) +
+  scale_x_continuous(breaks = seq(min(data$Age), max(data$Age), by = 1)) +  # Sets the x-axis breaks to increment by 1
+  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 50000)) +  # Formats the y-axis labels as dollars and sets breaks
+  labs(title = "Age vs Income",
+       x = "Age",
+       y = "Annual Income")
 
-long_data = melt(data, id.vars = c("Country.Name", "Country.Code"),
-                  variable.name = "Year", value.name = "PovertyRatio")
 
-colnames(long_data)
-head(long_data)
+ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD)) +
+  geom_boxplot() +
+  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 50000)) +  # Formats the y-axis labels as dollars and sets breaks
+  labs(title = "Box Plot of Annual Income by Age",
+       x = "Age",
+       y = "Annual Income")
 ```
 
+
+# Graph 3 - Sector/Income 
 ```{r include=TRUE}
 
-# Convert 'Year' from a character to an integer, remove 'X' prefix convert
-long_data$Year = as.integer(gsub("^X", "", long_data$Year))
+ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD)) +
+  geom_boxplot() +
+  labs(title = "Box Plot of Annual Income by Employment Type",
+       x = "Employment Type",
+       y = "Annual Income")
 
-# Filter the data for the USA
-usa_data = filter(long_data, `Country.Code` == "USA")
-
-# Plot the data
-ggplot(usa_data, aes(x = Year, y = PovertyRatio)) +
-  geom_line() + # Use geom_line() for a line plot
-  labs(title = "Poverty Ratio Over the Years in the USA",
-       x = "Year",
-       y = "Poverty Ratio")
 
 
 ```
 
-
-# plot the data for all the countries
-
-```{r include=TRUE}
-# Plot the data for all the countries
-ggplot(long_data, aes(x = Year, y = PovertyRatio)) +
-  geom_line(aes(group = Country.Name)) + # Use geom_line() for a line plot
-  labs(title = "Poverty Ratio Over the Years",
-       x = "Year",
-       y = "Poverty Ratio")
-
-# Plot the average poverty ratio over the years for each country in a bar plot 
-ggplot(long_data, aes(x = Year, y = PovertyRatio)) +
-  geom_line(stat = "summary", fun = "mean") +
-  labs(title = "Average Poverty Ratio Over the Years",
-       x = "Year",
-       y = "Average Poverty Ratio")
-
-
-```
-
-
-# Create a histogram to visualize the distribution of the selected numeric variable. You are encouraged to experiment with bin sizes and labels.
-
-```{r include=TRUE}
-# Create a histogram to visualize the distribution of the selected numeric variable. You are encouraged to experiment with bin sizes and labels. 
-ggplot(long_data, aes(x = PovertyRatio)) +
-  geom_histogram(binwidth = 0.5, fill = "blue", color = "black") +
-  labs(title = "Poverty Ratio Distribution",
-       x = "Poverty Ratio",
-       y = "Frequency")
-
-# Look at the historgram but only for year 2020+
-year_2020_plus  = filter(long_data, Year >= 2000)
-# Remove outliers, values that Poverty.Ration > 10 
-#year_2020_plus = filter(year_2020_plus, PovertyRatio <= 10)
-ggplot(year_2020_plus, aes(x = PovertyRatio)) +
-  geom_histogram(binwidth = 0.06, fill = "red", color = "black") +
-  labs(title = "Poverty Ratio Distribution for 2000+",
-       x = "Poverty Ratio",
-       y = "Frequency")
-
-
-```
-
-
-# Create a box plot to visualize the median, quartiles, and potential outliers of the selected numeric variable.
-
-```{r include=TRUE}
-# Create a box plot to visualize the median, quartiles, and potential outliers of the selected numeric variable.
-ggplot(long_data, aes(x = Year, y = PovertyRatio)) +
-  geom_boxplot(fill = "lightblue",) +
-  labs(title = "Poverty Ratio Boxplot",
-       x = "",
-       y = "Poverty Ratio")
-
-
-```
 
 
 
