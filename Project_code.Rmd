@@ -1,18 +1,15 @@
 ---
-title: "Project 1"
-output:
-  powerpoint_presentation: default
-  beamer_presentation: default
-date: "2024-02-14"
+title: "Project 1 - Travel Insurance Data"
+author: "Kevin Lopez, Clarisse Sarah, and Mayank Thacker" 
+output: word_document
+date: "`r Sys.Date()`"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-
-
-
+```{=html}
 <!-- Load the Dataset
 For instance, If you're using a sample dataset like "mtcars," load it using data(mtcars)
 
@@ -31,83 +28,128 @@ Create a bar plot to visualize the count distribution of the selected categorica
  
 
 Prepare a write-up accompanying your codes, describe the insights you've gained from each plot. -->
- 
- 
- 
+```
 # Explain the dataset
-The dataset is a travel insurance dataset. It contains information travelers and whether they purchased travel insurance or not and other information (age, income, Employment, etc). 
-The dataset contains 10 columns and 1986 rows of information. The columns are:
-idx	Age	Employment Type	GraduateOrNot	AnnualIncome	FamilyMembers	ChronicDiseases	FrequentFlyer	EverTravelledAbroad	TravelInsurance
 
-Age- Age Of The Customer
-Employment Type- The Sector In Which Customer Is Employed
-GraduateOrNot- Whether The Customer Is College Graduate Or Not
-AnnualIncome- The Yearly Income Of The Customer In Indian Rupees[Rounded To Nearest 50 Thousand Rupees]
-FamilyMembers- Number Of Members In Customer's Family
-ChronicDisease- Whether The Customer Suffers From Any Major Disease Or Conditions Like Diabetes/High BP or Asthama,etc.
-FrequentFlyer- Derived Data Based On Customer's History Of Booking Air Tickets On Atleast 4 Different Instances In The Last 2 Years[2017-2019].
-EverTravelledAbroad- Has The Customer Ever Travelled To A Foreign Country[Not Necessarily Using The Company's Services]
-TravelInsurance- Did The Customer Buy Travel Insurance Package During Introductory Offering Held In The Year 2019.
+The dataset is a travel insurance dataset. It contains information travelers and whether they purchased travel insurance or not and other information (age, income, Employment, etc). The dataset contains 10 columns and 1986 rows of information.
 
+### The columns are:
 
-# Load the Dataset 
+**Age**- Age Of The Customer
+
+**Employment Type**- The Sector In Which Customer Is Employed
+
+**GraduateOrNot**- Whether The Customer Is College Graduate Or Not
+
+**AnnualIncome**- The Yearly Income Of The Customer In Indian Rupees[Rounded To Nearest 50 Thousand Rupees]
+
+**FamilyMembers**- Number Of Members In Customer's Family
+
+**ChronicDisease**- Whether The Customer Suffers From Any Major Disease Or Conditions Like Diabetes/High BP or Asthama,etc.
+
+**FrequentFlyer**- Derived Data Based On Customer's History Of Booking Air Tickets On Atleast 4 Different Instances In The Last 2 Years[2017-2019].
+
+**EverTravelledAbroad**- Has The Customer Ever Travelled To A Foreign Country[Not Necessarily Using The Company's Services]
+
+**TravelInsurance**- Did The Customer Buy Travel Insurance Package During Introductory Offering Held In The Year 2019.
+
+# Load the Dataset
+
 ```{r include=TRUE}
 data = read.csv("./TravelInsurancePrediction.csv")
+#knitr::kable(head(data), caption = "Table 1: First 6 Rows of the Dataset")
+# colnames(data)
+library(flextable)
 
-colnames(data)
-head(data)
+display_table = function(data){
+  my_table <- head(data)  
+  table = flextable(my_table)
+  table = fontsize(table, size = 7, part = "all")
+  table = align(table, align = "center", part = "all")
+  table = theme_box(table)  # Apply a predefined theme
+  table = align(table, align = "center", part = "all")
+  table = bold(table, part = "header")  # Bold text in header
+  table = width(table, width = .7)
+  table = width(table, j = 1, width = .2)  # Adjust width of the first column
+  return(table)  # Display the flextable
+}
+
+display_table(data)
+
+
 
 ```
 
+## reshaping data
 
-# reshaping data 
-Data is already in long format. 
-Data for income is given in Indian Rupees. We will create a new column to convert it to USD. Column name will be AnnualIncomeUSD
+Data is already in long format. Data for income is given in Indian Rupees. We will create a new column to convert it to USD. Column name will be AnnualIncomeUSD
+
 ```{r include=TRUE}
 RUPEE_TO_USD = 0.012
 # add a new column for income in USD
 data$AnnualIncomeUSD <- data$AnnualIncome * RUPEE_TO_USD
-head(data)
+table = display_table(data)
+
+# hihglight the last column foreground
+table = color(table, color = "orange", part = "all", j = 11)
+table
 
 ```
 
 # Graph 2 - Age/Income
-```{r include=TRUE}
+
+```{r fig.width=8, fig.height=4}
 library(ggplot2)
 library(reshape2)
 
-ggplot(data, aes(x = Age, y = AnnualIncomeUSD)) +
-  geom_point(aes(color = TravelInsurance)) +
+p = ggplot(data, aes(x = Age, y = AnnualIncomeUSD)) +
+  geom_point(aes(color = as.factor(TravelInsurance))) +  # Convert TravelInsurance to a factor for discrete color mapping
   scale_x_continuous(breaks = seq(min(data$Age), max(data$Age), by = 1)) +  # Sets the x-axis breaks to increment by 1
-  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 50000)) +  # Formats the y-axis labels as dollars and sets breaks
+  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
+  scale_color_manual(values = c("0" = "black", "1" = "orange"), name = "Travel Insurance", labels=c("No ", "Yes")) +  # Sets custom colors for TravelInsurance and customizes legend title
   labs(title = "Age vs Income",
        x = "Age",
-       y = "Annual Income")
-
-
-ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD)) +
-  geom_boxplot() +
-  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 50000)) +  # Formats the y-axis labels as dollars and sets breaks
-  labs(title = "Box Plot of Annual Income by Age",
-       x = "Age",
-       y = "Annual Income")
+       y = "Annual Income") + 
+  theme_light()
+p
 ```
 
+# Graph 2 - Age/Income as boxplot
 
-# Graph 3 - Sector/Income 
+```{r  fig.width=8, fig.height=4}
+ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) +
+  geom_boxplot() +
+  labs(title = "Box Plot of Annual Income by Age",
+       x = "Age",
+       y = "Annual Income",
+       fill = "Travel\nInsurance"
+       ) + 
+  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +
+  # change the text of legend title 
+    scale_fill_manual(values = c("0" = "gray", "1" = "green"),
+                    labels = c("No", "Yes")) +  # Sets custom colors and labels for the legend
+  theme_light() +  
+  theme( 
+        plot.title = element_text(hjust = 0.5),  # Centers the plot  
+       )
+```
+
+# Graph 3 - Sector/Income
+
 ```{r include=TRUE}
 
-ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD)) +
+ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD, fill = Employment.Type)) +
   geom_boxplot() +
   labs(title = "Box Plot of Annual Income by Employment Type",
        x = "Employment Type",
-       y = "Annual Income")
+       y = "Annual Income") + 
+    scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
+  theme_light() +  
+  theme( 
+        legend.position = "none",  # Hides the legend as the fill color is self-explanatory
+        plot.title = element_text(hjust = 0.5),  # Centers the plot title
+       )  
 
 
 
 ```
-
-
-
-
- 
