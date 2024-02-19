@@ -9,29 +9,10 @@ date: "`r Sys.Date()`"
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{=html}
-<!-- Load the Dataset
-For instance, If you're using a sample dataset like "mtcars," load it using data(mtcars)
-
-Or if you are using a CSV dataset in R, you can use the ‘read.csv’ function, which is part of the base R package.
-
-data <- read.csv("your_file_path.csv")
- 
-
-Create at least four different types of ggplot visualizations for the selected variables:
-Example, If applicable:
-
-Create a histogram to visualize the distribution of the selected numeric variable. You are encouraged to experiment with bin sizes and labels.
-Create a box plot to visualize the median, quartiles, and potential outliers of the selected numeric variable.
-Create a density plot to visualize the probability density of the selected numeric variable.
-Create a bar plot to visualize the count distribution of the selected categorical variable.
- 
-
-Prepare a write-up accompanying your codes, describe the insights you've gained from each plot. -->
-```
 # Explain the dataset
 
 The dataset is a travel insurance dataset. It contains information travelers and whether they purchased travel insurance or not and other information (age, income, Employment, etc). The dataset contains 10 columns and 1986 rows of information.
+- https://www.kaggle.com/datasets/tejashvi14/travel-insurance-prediction-data
 
 ### The columns are:
 
