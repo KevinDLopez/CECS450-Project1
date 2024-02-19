@@ -1,7 +1,9 @@
 ---
 title: "Project 1 - Travel Insurance Data"
-author: "Kevin Lopez, Clarisse Sarah, and Mayank Thacker" 
-output: word_document
+author: "Kevin Lopez, Clarisse Bonang, and Mayank Thacker" 
+output:
+  word_document: default
+  powerpoint_presentation: default
 date: "`r Sys.Date()`"
 ---
 
@@ -9,28 +11,32 @@ date: "`r Sys.Date()`"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Work break down:
+# Work breakdown:
 
-### Kevin
+### Kevin Lopez
 
 -   Create shared Rmd file and combined code from team members. [GitHub Repository](https://github.com/KevinDLopez/CECS450-Project1)
 -   Created Report using Rmd ( Not much work, Started Rmd to be well formated for word).
--   Created Graph 4 and Graph 5 6.
+-   Created Graph 4 and Graph 5,6.
 
-### Clarisse
+### Clarisse Bonang
 
 -   Created Graph 3.
 
 -   Worked on [PPT](https://docs.google.com/presentation/d/1Rc63oOnZWbTFga_m7iyCOpVMNwukj7gsjbV8HFEq7xQ/edit?pli=1#slide=id.g25f6af9dd6_0_0), and report.
 
-### Mayank
+### Mayank Thacker
 
 -   Created Graph 1, 2.
 -   Created Worked on [PPT](https://docs.google.com/presentation/d/1Rc63oOnZWbTFga_m7iyCOpVMNwukj7gsjbV8HFEq7xQ/edit?pli=1#slide=id.g25f6af9dd6_0_0)
 
 # Explain the dataset
 
-The travel insurance dataset provides valuable information about travelers, offering insights into their travel insurance purchasing decisions. In addition, the dataset includes details such as age, income, employment status, and more to highlight factors influencing insurance choices. With 10 columns and 1986 rows, the data offers robust information for conducting insightful analyses and patterns within the dataset. 
+The travel insurance dataset provides valuable information about travelers, offering insights into their travel insurance purchasing decisions. In addition, the dataset includes details such as age, income, employment status, and more to highlight factors influencing insurance choices. With 10 columns and 1986 rows, the data offers robust information for conducting insightful analyses and patterns within the dataset.
+
+-   The data was collected at Guru Gobind Singh Indraprastha University (GGSIPU).
+-   To access the dataset please visit [kaggle](https://www.kaggle.com/datasets/tejashvi14/travel-insurance-prediction-data).
+-   The dataset was collected from India.
 
 ### The columns are:
 
@@ -99,38 +105,39 @@ table
 
 ```
 
-
 # Graph 1 - Frequency of Age Distribution
-- The histogram shows the frequency of each individual age in the dataset.  It provides insights into the prevalence of different age groups within the dataset.
-- 28 years old has the highest frequency
-```{r}
 
+The histogram represents the frequency  distribution of individual ages in the dataset. It provides insights into the prevalence of various age groups within the dataset. For instance, 28 years old has the highest frequency, followed by 34 years old. Beyond these notable frequencies, there is an even distribution across the remaining age categories, highlighting a balanced representation amongst the age values.
+
+-   The histogram shows the frequency of each individual age in the dataset. It provides insights into the prevalence of different age groups within the dataset.
+-   28 years old has the highest frequency
+
+```{r}
 ggplot(data, aes(x = factor(Age))) +
   geom_bar(fill = "lightcoral", color = "black") + # create histogram based on Age. 
   labs(title = "Frequency of Each Age", x = "Age", y = "Frequency") # add title and labels for x,y axis
   
 ```
 
-
 # Graph 2 - Annual Income Density
-- To visualize the probability density of a Annual Income 
-- X-axis: "Annual Income", Y-axis: "Density". 
+
+-   The graph shows the probability density of Annual Income.
+-   X-axis: "Annual Income", Y-axis: "Density".
 
 ```{r}
-ggplot(data, aes(x = AnnualIncome)) + # Set the x-axis to AnnualIncome
+ggplot(data, aes(x = AnnualIncomeUSD)) + # Set the x-axis to AnnualIncome
   geom_density(fill = "lightcoral", color = "black") + # Add a density layer with lightcoral fill and black border
-  labs(title = "Density Plot of Annual Income", x = "Annual Income", y = "Density") # Add title and axis labels
-  
+  labs(title = "Density Plot of Annual Income", x = "Annual Income", y = "Density") + # Add title and axis labels
+  scale_x_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) # add $ and increments by 2000 
 ```
 
 # Graph 3 - Bar Plot of Frequent Flyer by age
 
-- The graph highlights the distribution of flyer status across different age groups. 
-- It’s evident that there is a higher number of non-frequent flyers than that of frequent flyers between the ages of 25 to 35. 
-- We can see that there are fluctuations in the frequency of both frequent and non-frequent flyers. 
-- In particular, there is a decline in the number of frequent flyers between ages 25 to 27 and 28 to 30 and a steady increase in non-frequent flyers. In comparison, between ages 32 to 24, there is an increase in the number of frequent flyers and non-frequent flyers. 
-- Notably, 28 year-olds appear to be less likely to be frequent flyers based on the lower count from the graph. 
-- In conclusion, the data suggests that the proportion of frequent and non-frequent flyers varies across different age groups.
+-   The graph highlights the distribution of flyer status across different age groups.
+-   It’s evident that there is a higher number of non-frequent flyers than that of frequent flyers between the ages of 25 to 35.
+-   In particular, there is a decline in the number of frequent flyers between ages 25 to 27 and 28 to 30 and a steady increase in non-frequent flyers. In comparison, between ages 32 to 24, there is an increase in the number of frequent flyers and non-frequent flyers.
+-   Notably, 28 year-olds appear to be less likely to be frequent flyers based on the lower count from the graph.
+-   In conclusion, the data suggests that the proportion of frequent and non-frequent flyers varies across different age groups.
 
 ```{r}
 # grouped bar chart
@@ -144,9 +151,11 @@ ggplot(data, aes(x = Age, fill = FrequentFlyer)) +
 
 # Graph 4 - Sector/Income
 
--   We can see how the income is distributed by Employment Type (Goverment vs Private).
+-   The following graph shows how the income is distributed by Employment type ( Government vs Private).
 
--   We can see that the income is slightly higher in the private sector.
+-   The Graph shows that interquartille range income is slightly higher in the private sector.
+
+-   Income data does not contain any outliers.
 
 ```{r include=TRUE}
 ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD, fill = Employment.Type)) +
@@ -163,16 +172,17 @@ ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD, fill = Employment.Typ
 
 # Graph 5 - Age/Income
 
-Age and income is a cool graph to see. We can see how income is distributed by age. - Generally it is believed that income increases with age. - Peak around 40-50 since that is when people are at their peak in their careers.
+The graph shows income related to age. And see the income distribution by age.
 
-## What does the data tell us
+-   Generally, it is believed that income increases with age.
 
--   There is not a big difference in the age and the income that these people make.
+    -   Income peak around 40-50 years old, since that is when an individual will be at the peak of their careers.
 
-## By looking at a barplot for each age,
+## What does the data tell us?
 
--   There is a slight increase of people who buy insurance as they make more money.
--   It is easier to tell in box plot compared to scatter plot.
+-   This data does not fit the idea that income increases as age increases.
+-   There is a slight increase in people who buy insurance as they make more money.
+    -   It is easier to tell in boxplot compared to scatter plot.
 
 ```{r fig.width=8, fig.height=4}
 
@@ -183,10 +193,17 @@ p = ggplot(data, aes(x = Age, y = AnnualIncomeUSD)) +
   scale_color_manual(values = c("0" = "black", "1" = "orange"), name = "Travel Insurance", labels=c("No ", "Yes")) +  # Sets custom colors for TravelInsurance and customizes legend title
   labs(title = "Age vs Income", x = "Age", y = "Annual Income") +  # Sets the title and label for x,y axis 
   theme_light()
+# print(min(data$AnnualIncomeUSD) )
+# print(max(data$AnnualIncomeUSD))
 p 
+
 ```
 
 ## Age/Income as box-plot
+
+-   This graph contains the same data plotted as the graph before ( Annual Income v Age).
+
+-   This plot shows that the median income(and Interquartile) is higher for those that purchase travel insurance.
 
 ```{r  fig.width=8, fig.height=4}
 ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) + # Plot Age ( min-max) vs AnnualIncomeUSD with fill color as TravelInsurance
@@ -194,7 +211,22 @@ ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelI
   labs(title = "Box Plot of Annual Income by Age", x = "Age", y = "Annual Income", fill = "Travel\nInsurance" ) + # Sets the title and label for x,y axis and legend title
   scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) + # Formats the y-axis labels as dollars and increase by 2k 
   # change the text of legend title 
-  scale_fill_manual(values = c("0" = "gray", "1" = "green"), labels = c("No", "Yes")) +  # Sets custom colors and labels for the legend
+  scale_fill_manual(values = c("0" = "gray", "1" = "orange"), labels = c("No", "Yes")) +  # Sets custom colors and labels for the legend
   theme_light() +  
   theme(  plot.title = element_text(hjust = 0.5)  ) # Centers the plot title
 ```
+
+
+<!-- 
+# Income/Travel Insurance
+
+```{r  fig.width=8, fig.height=4}
+ggplot(data, aes( y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) + # AnnualIncomeUSD with fill color as TravelInsurance
+  geom_boxplot() +
+  labs(title = "Box Plot of Annual Income by Age",  y = "Annual Income", fill = "Travel\nInsurance" ) + # Sets the title and label for x,y axis and legend title
+  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) + # Formats the y-axis labels as dollars and increase by 2k 
+  # change the text of legend title 
+  scale_fill_manual(values = c("0" = "gray", "1" = "orange"), labels = c("No", "Yes")) +  # Sets custom colors and labels for the legend
+  theme_light() +  
+  theme(  plot.title = element_text(hjust = 0.5)  ) # Centers the plot title
+``` -->
