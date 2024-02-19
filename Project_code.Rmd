@@ -124,7 +124,7 @@ p
 
 
 
-# Graph 2 - Age/Income as boxplot
+## Graph 2 - Age/Income as boxplot
 
 ```{r  fig.width=8, fig.height=4}
 ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) + # Plot Age ( min-max) vs AnnualIncomeUSD with fill color as TravelInsurance
@@ -188,6 +188,42 @@ ggplot(data, aes(x = as.factor(GraduateOrNot), y = AnnualIncomeUSD,  ) ) +
   theme( 
         plot.title = element_text(hjust = 0.5),  # Centers the plot title
        )
+```
+
+
+
+```{r}
+# Graph 4 - Histogram of Age
+ggplot(data, aes(x = factor(Age))) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(title = "Frequency of Each Age", x = "Age", y = "Frequency")
+  
+  
+```
+
+```{r}
+# Graph 5 - Density Plot of Age 
+ggplot(data, aes(x = Age)) +
+  geom_density(fill = "lightcoral", color = "black") +
+  labs(title = "Density Plot of Age", x = "BMI", y = "Density")
+  
+      labs(title = "Count Distribution of Employment Type", x = "Employment Type", y = "Count")
+```
+
+```{r}
+# Graph 6 - Density Plot of Income
+ggplot(data, aes(x = AnnualIncome)) +
+  geom_density(fill = "lightcoral", color = "black") +
+  labs(title = "Density Plot of BMI", x = "AnnualIncome", y = "Density")
+  
+```
+
+```{r}
+# Graph 7 - Bar Plot of Employment Type
+ggplot(data, aes(x = factor(Employment.Type))) +
+      geom_bar(fill = "lightseagreen", color = "black")  +
+      labs(title = "Count Distribution of Employment Type", x = "Employment Type", y = "Count")
+
 ```
 
 
