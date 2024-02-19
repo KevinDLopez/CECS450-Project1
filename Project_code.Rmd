@@ -211,6 +211,20 @@ p
 ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) + # Plot Age ( min-max) vs AnnualIncomeUSD with fill color as TravelInsurance
   geom_boxplot() +
   labs(title = "Box Plot of Annual Income by Age", x = "Age", y = "Annual Income", fill = "Travel\nInsurance" ) + # Sets the title and label for x,y axis and legend title
+  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) + # increase by y points by 2k 
+  # change the text of legend title 
+  scale_fill_manual(values = c("0" = "gray", "1" = "orange"), labels = c("No", "Yes")) +  # Sets custom colors and labels for the legend
+  theme_light() +  
+  theme(  plot.title = element_text(hjust = 0.5)  ) # Centers the plot title
+```
+
+<!-- 
+# Income vs chances of buying ticket
+
+```{r  fig.width=8, fig.height=4}
+ggplot(data, aes( y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) + # AnnualIncomeUSD with fill color as TravelInsurance
+  geom_boxplot() +
+  labs(title = "Box Plot - Travel Insurance",  y = "Annual Income", fill = "Travel\nInsurance" ) + # Sets the title and label for x,y axis and legend title
   scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) + # Formats the y-axis labels as dollars and increase by 2k 
   # change the text of legend title 
   scale_fill_manual(values = c("0" = "gray", "1" = "orange"), labels = c("No", "Yes")) +  # Sets custom colors and labels for the legend
@@ -218,3 +232,7 @@ ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelI
   theme(  plot.title = element_text(hjust = 0.5)  ) # Centers the plot title
 ```
 
+--> 
+
+# Comprehensive Analysis
+The data indicates a higher median income (and Interquartile Range) is higher for those that purchase travel insurance, suggesting a preference for insurance investment among individuals with higher incomes. This emphasizes the need for tailoring marketing strategies to specific income segments. Furthermore, adapting to these trends can enhance insurers effectiveness in the landscape of the travel insurance market.
