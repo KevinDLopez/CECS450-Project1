@@ -125,15 +125,21 @@ ggplot(data, aes(x = AnnualIncome)) + # Set the x-axis to AnnualIncome
 
 # Graph 3 - Bar Plot of Frequent Flyer by age
 
--   we still need to add info here!
+- The graph highlights the distribution of flyer status across different age groups. 
+- It’s evident that there is a higher number of non-frequent flyers than that of frequent flyers between the ages of 25 to 35. 
+- We can see that there are fluctuations in the frequency of both frequent and non-frequent flyers. 
+- In particular, there is a decline in the number of frequent flyers between ages 25 to 27 and 28 to 30 and a steady increase in non-frequent flyers. In comparison, between ages 32 to 24, there is an increase in the number of frequent flyers and non-frequent flyers. 
+- Notably, 28 year-olds appear to be less likely to be frequent flyers based on the lower count from the graph. 
+- In conclusion, the data suggests that the proportion of frequent and non-frequent flyers varies across different age groups.
 
 ```{r}
 # grouped bar chart
-frequentFlyerStatus <- c("Yes" = "red", "No" = "blue")
-ggplot(data, aes(x = Age, fill = FrequentFlyer)) +
-  geom_bar(position = "dodge") +
-  scale_fill_manual(values = frequentFlyerStatus) +
-  labs(title = "Distribution of Frequent Flyer Status by Age", x = "Age", y = "Count") 
+frequentFlyerStatus <- c("Yes" = "red", "No" = "blue") 
+ggplot(data, aes(x = Age, fill = FrequentFlyer)) + 
+  geom_bar(position = "dodge") + #Ensures bars for frequent and non-frequent flyers are side by side
+  scale_fill_manual(values = frequentFlyerStatus) + #Fills colors for both flyer status values
+  labs(title = "Distribution of Frequent Flyer Status by Age", x = "Age", y = "Count") +
+  scale_x_continuous(breaks = seq(25, 35, 1))  # Adding ticks for ages 25 to 35
 ```
 
 # Graph 4 - Sector/Income
