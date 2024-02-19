@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Explain the dataset
 
-The dataset is a travel insurance dataset. It contains information travelers and whether they purchased travel insurance or not and other information (age, income, Employment, etc). The dataset contains 10 columns and 1986 rows of information. - <https://www.kaggle.com/datasets/tejashvi14/travel-insurance-prediction-data>
+The travel insurance dataset provides valuable information about travelers, offering insights into their travel insurance purchasing decisions. In addition, the dataset includes details such as age, income, employment status, and more to highlight factors influencing insurance choices. With 10 columns and 1986 rows, the data offers robust information for conducting insightful analyses and patterns within the dataset. 
 
 ### The columns are:
 
