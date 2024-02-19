@@ -87,8 +87,8 @@ table
 ```{r}
 # Graph 4 - Histogram of Age
 ggplot(data, aes(x = factor(Age))) +
-  geom_bar(fill = "lightcoral", color = "black") +
-  labs(title = "Frequency of Each Age", x = "Age", y = "Frequency")
+  geom_bar(fill = "lightcoral", color = "black") + # create histogram based on Age. 
+  labs(title = "Frequency of Each Age", x = "Age", y = "Frequency") # add title and labels for x,y axis
   
 ```
 
@@ -112,11 +112,12 @@ frequentFlyerStatus <- c("Yes" = "red", "No" = "blue")
 ggplot(data, aes(x = Age, fill = FrequentFlyer)) +
   geom_bar(position = "dodge") +
   scale_fill_manual(values = frequentFlyerStatus) +
-  labs(title = "Distribution of Frequent Flyer Status by Age", x = "Age", y = "Count")
+  labs(title = "Distribution of Frequent Flyer Status by Age", x = "Age", y = "Count") 
 ```
 
 # Graph 4 - Sector/Income
 - We can see how the income is distributed by Employment Type (Goverment vs Private).
+
 - We can see that the income is slightly higher in the private sector.
 ```{r include=TRUE}
 ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD, fill = Employment.Type)) +
