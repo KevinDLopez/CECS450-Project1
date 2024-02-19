@@ -41,6 +41,8 @@ data = read.csv("./TravelInsurancePrediction.csv")
 #knitr::kable(head(data), caption = "Table 1: First 6 Rows of the Dataset")
 # colnames(data)
 library(flextable)
+library(ggplot2)
+library(reshape2)
 
 display_table = function(data){
   # Function to display a nice looking table using flextable. 
@@ -61,7 +63,6 @@ display_table = function(data){
 display_table(data)
 
 
-
 ```
 
 ## reshaping data
@@ -80,18 +81,72 @@ table
 
 ```
 
-# Graph 2 - Age/Income
+
+# Graph 1 - Frequency of Travel Insurance
+- we still need to add info here! 
+```{r}
+# Graph 4 - Histogram of Age
+ggplot(data, aes(x = factor(Age))) +
+  geom_bar(fill = "lightcoral", color = "black") +
+  labs(title = "Frequency of Each Age", x = "Age", y = "Frequency")
+  
+```
+
+
+# Graph 2 - Density Plot of Income
+- we still need to add info here! 
+
+```{r}
+ggplot(data, aes(x = AnnualIncome)) +
+  geom_density(fill = "lightcoral", color = "black") +
+  labs(title = "Density Plot of Annual Income", x = "Annual Income", y = "Density")
+  
+```
+
+
+# Graph 3 - Bar Plot of Frequent Flyer by age 
+- we still need to add info here!
+```{r}
+# grouped bar chart
+frequentFlyerStatus <- c("Yes" = "red", "No" = "blue")
+ggplot(data, aes(x = Age, fill = FrequentFlyer)) +
+  geom_bar(position = "dodge") +
+  scale_fill_manual(values = frequentFlyerStatus) +
+  labs(title = "Distribution of Frequent Flyer Status by Age", x = "Age", y = "Count")
+```
+
+# Graph 4 - Sector/Income
+- We can see how the income is distributed by Employment Type (Goverment vs Private).
+- We can see that the income is slightly higher in the private sector.
+```{r include=TRUE}
+ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD, fill = Employment.Type)) +
+  geom_boxplot() +
+  labs(title = "Box Plot of Annual Income by Employment Type", x = "Employment Type", y = "Annual Income") + # Sets the title and label for x,y axis
+    scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
+  theme_light() +  
+  theme( 
+        legend.position = "none",  # Hides the legend 
+        plot.title = element_text(hjust = 0.5),  # Center the plot title
+       )  
+
+```
+
+
+
+
+
+# Graph 5 - Age/Income
 Age and income is a cool graph to see. We can see how income is distributed by age.
 - Generally it is believed that income increases with age. 
 - Peak around 40-50 since that is when people are at their peak in their careers.
+
 ## What does the data tell us 
 - There is not a big difference in the age and the income that these people make. 
+
 ## By looking at a barplot for each age, 
 - There is a slight increase of people who buy insurance as they make more money. 
 - It is easier to tell in box plot compared to scatter plot.
 ```{r fig.width=8, fig.height=4}
-library(ggplot2)
-library(reshape2)
 
 p = ggplot(data, aes(x = Age, y = AnnualIncomeUSD)) +
   geom_point(aes(color = as.factor(TravelInsurance))) +  # Convert TravelInsurance to a factor for  color mapping
@@ -104,8 +159,7 @@ p
 ```
 
 
-
-## Graph 2 - Age/Income as boxplot
+## Age/Income as boxplot
 
 ```{r  fig.width=8, fig.height=4}
 ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) + # Plot Age ( min-max) vs AnnualIncomeUSD with fill color as TravelInsurance
@@ -118,94 +172,9 @@ ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelI
   theme(  plot.title = element_text(hjust = 0.5)  ) # Centers the plot title
 ```
 
-# Graph 3 - Sector/Income
-- We can see how the income is distributed by Employment Type (Goverment vs Private).
-- We can see that the income is slightly higher in the private sector.
-
-```{r include=TRUE}
-ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD, fill = Employment.Type)) +
-  geom_boxplot() +
-  labs(title = "Box Plot of Annual Income by Employment Type", x = "Employment Type", y = "Annual Income") + # Sets the title and label for x,y axis
-    scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
-  theme_light() +  
-  theme( 
-        legend.position = "none",  # Hides the legend 
-        plot.title = element_text(hjust = 0.5),  # Center the plot title
-       )  
 
 
 
-```
-
-# Ever Travelled Abroad and anual income 
-#scatter plot 
-
-```{r include=TRUE}
-
-ggplot(data, aes(x = as.factor(EverTravelledAbroad), y = AnnualIncomeUSD ) ) +
-  geom_boxplot() +
-  labs(title = "Box Plot of Annual Income by Ever Travelled Abroad",
-       x = "Ever Travelled Abroad",
-       y = "Annual Income") + 
-    scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
-  theme_light() +  
-  theme( 
-        plot.title = element_text(hjust = 0.5),  # Centers the plot title
-       )
-```
-
-
-# Graph 4 - graduate or not and anual income 
-
-```{r include=TRUE}
-
-ggplot(data, aes(x = as.factor(GraduateOrNot), y = AnnualIncomeUSD,  ) ) +
-  geom_boxplot(fill = "blue", color = "red") +
-  labs(title = "Box Plot of Annual Income by Graduate or Not",
-       x = "Graduate or Not",
-       y = "Annual Income") + 
-    scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
-  theme_light() +  
-  theme( 
-        plot.title = element_text(hjust = 0.5),  # Centers the plot title
-       )
-```
-
-
-
-```{r}
-# Graph 4 - Histogram of Age
-ggplot(data, aes(x = factor(Age))) +
-  geom_bar(fill = "skyblue", color = "black") +
-  labs(title = "Frequency of Each Age", x = "Age", y = "Frequency")
-  
-  
-```
-
-```{r}
-# Graph 5 - Density Plot of Age 
-ggplot(data, aes(x = Age)) +
-  geom_density(fill = "lightcoral", color = "black") +
-  labs(title = "Density Plot of Age", x = "BMI", y = "Density")
-  
-      labs(title = "Count Distribution of Employment Type", x = "Employment Type", y = "Count")
-```
-
-```{r}
-# Graph 6 - Density Plot of Income
-ggplot(data, aes(x = AnnualIncome)) +
-  geom_density(fill = "lightcoral", color = "black") +
-  labs(title = "Density Plot of BMI", x = "AnnualIncome", y = "Density")
-  
-```
-
-```{r}
-# Graph 7 - Bar Plot of Employment Type
-ggplot(data, aes(x = factor(Employment.Type))) +
-      geom_bar(fill = "lightseagreen", color = "black")  +
-      labs(title = "Count Distribution of Employment Type", x = "Employment Type", y = "Count")
-
-```
 
 
 
