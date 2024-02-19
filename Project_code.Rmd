@@ -19,14 +19,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Clarisse
 
--   Created Graph 1, 2.
+-   Created Graph 3.
 
--   Worked on PPT.
+-   Worked on [PPT](https://docs.google.com/presentation/d/1Rc63oOnZWbTFga_m7iyCOpVMNwukj7gsjbV8HFEq7xQ/edit?pli=1#slide=id.g25f6af9dd6_0_0), and report.
 
 ### Mayank
 
--   Created Graph 3.
--   Created Worked on PPT
+-   Created Graph 1, 2.
+-   Created Worked on [PPT](https://docs.google.com/presentation/d/1Rc63oOnZWbTFga_m7iyCOpVMNwukj7gsjbV8HFEq7xQ/edit?pli=1#slide=id.g25f6af9dd6_0_0)
 
 # Explain the dataset
 
@@ -99,26 +99,27 @@ table
 
 ```
 
-# Graph 1 - Frequency of Travel Insurance
 
--   we still need to add info here!
-
+# Graph 1 - Frequency of Age Distribution
+- The histogram shows the frequency of each individual age in the dataset.  It provides insights into the prevalence of different age groups within the dataset.
+- 28 years old has the highest frequency
 ```{r}
-# Graph 4 - Histogram of Age
+
 ggplot(data, aes(x = factor(Age))) +
   geom_bar(fill = "lightcoral", color = "black") + # create histogram based on Age. 
   labs(title = "Frequency of Each Age", x = "Age", y = "Frequency") # add title and labels for x,y axis
   
 ```
 
-# Graph 2 - Density Plot of Income
 
--   we still need to add info here!
+# Graph 2 - Annual Income Density
+- To visualize the probability density of a Annual Income 
+- X-axis: "Annual Income", Y-axis: "Density". 
 
 ```{r}
-ggplot(data, aes(x = AnnualIncome)) +
-  geom_density(fill = "lightcoral", color = "black") +
-  labs(title = "Density Plot of Annual Income", x = "Annual Income", y = "Density")
+ggplot(data, aes(x = AnnualIncome)) + # Set the x-axis to AnnualIncome
+  geom_density(fill = "lightcoral", color = "black") + # Add a density layer with lightcoral fill and black border
+  labs(title = "Density Plot of Annual Income", x = "Annual Income", y = "Density") # Add title and axis labels
   
 ```
 
