@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Clarisse Bonang
 
--   Created Graph 3.
+-   Created Graph 3. And description/analysis of other graphs.
 
 -   Worked on [PPT](https://docs.google.com/presentation/d/1Rc63oOnZWbTFga_m7iyCOpVMNwukj7gsjbV8HFEq7xQ/edit?pli=1#slide=id.g25f6af9dd6_0_0), and report.
 
@@ -107,7 +107,7 @@ table
 
 # Graph 1 - Frequency of Age Distribution
 
-The histogram represents the frequency  distribution of individual ages in the dataset. It provides insights into the prevalence of various age groups within the dataset. For instance, 28 years old has the highest frequency, followed by 34 years old. Beyond these notable frequencies, there is an even distribution across the remaining age categories, highlighting a balanced representation amongst the age values.
+The histogram represents the frequency distribution of individual ages in the dataset. It provides insights into the prevalence of various age groups within the dataset. For instance, 28 years old has the highest frequency, followed by 34 years old. Beyond these notable frequencies, there is an even distribution across the remaining age categories, highlighting a balanced representation amongst the age values.
 
 -   The histogram shows the frequency of each individual age in the dataset. It provides insights into the prevalence of different age groups within the dataset.
 -   28 years old has the highest frequency
@@ -120,6 +120,8 @@ ggplot(data, aes(x = factor(Age))) +
 ```
 
 # Graph 2 - Annual Income Density
+
+The graph represents the probability density distribution across a range of annual income values, constrained between a minimum of \$3600 and a maximum of \$21600. Peaks in probability density occur at \$5600, \$9600, and \$13600. However, the graph highlights a dip in probability density between \$9600 to \$11600 and \$17600 to \$19600. Based on these probabilities, we anticipate a higher frequency of annual incomes at \$5600, \$9600, and \$13600, indicating a slight disparity within our population pool concerning annual income distributions.
 
 -   The graph shows the probability density of Annual Income.
 -   X-axis: "Annual Income", Y-axis: "Density".
@@ -216,17 +218,3 @@ ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelI
   theme(  plot.title = element_text(hjust = 0.5)  ) # Centers the plot title
 ```
 
-
-<!-- 
-# Income/Travel Insurance
-
-```{r  fig.width=8, fig.height=4}
-ggplot(data, aes( y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) + # AnnualIncomeUSD with fill color as TravelInsurance
-  geom_boxplot() +
-  labs(title = "Box Plot of Annual Income by Age",  y = "Annual Income", fill = "Travel\nInsurance" ) + # Sets the title and label for x,y axis and legend title
-  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) + # Formats the y-axis labels as dollars and increase by 2k 
-  # change the text of legend title 
-  scale_fill_manual(values = c("0" = "gray", "1" = "orange"), labels = c("No", "Yes")) +  # Sets custom colors and labels for the legend
-  theme_light() +  
-  theme(  plot.title = element_text(hjust = 0.5)  ) # Centers the plot title
-``` -->
