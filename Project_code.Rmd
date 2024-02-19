@@ -6,13 +6,31 @@ date: "`r Sys.Date()`"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# Work break down:
+
+### Kevin
+
+-   Create shared Rmd file and combined code from team members. [GitHub Repository](https://github.com/KevinDLopez/CECS450-Project1)
+-   Created Report using Rmd ( Not much work, Started Rmd to be well formated for word).
+-   Created Graph 4 and Graph 5 6.
+
+### Clarisse
+
+-   Created Graph 1, 2.
+
+-   Worked on PPT.
+
+### Mayank
+
+-   Created Graph 3.
+-   Created Worked on PPT
 
 # Explain the dataset
 
-The dataset is a travel insurance dataset. It contains information travelers and whether they purchased travel insurance or not and other information (age, income, Employment, etc). The dataset contains 10 columns and 1986 rows of information.
-- https://www.kaggle.com/datasets/tejashvi14/travel-insurance-prediction-data
+The dataset is a travel insurance dataset. It contains information travelers and whether they purchased travel insurance or not and other information (age, income, Employment, etc). The dataset contains 10 columns and 1986 rows of information. - <https://www.kaggle.com/datasets/tejashvi14/travel-insurance-prediction-data>
 
 ### The columns are:
 
@@ -65,7 +83,7 @@ display_table(data)
 
 ```
 
-## reshaping data
+## Reshaping data
 
 Data is already in long format. Data for income is given in Indian Rupees. We will create a new column to convert it to USD. Column name will be AnnualIncomeUSD
 
@@ -81,9 +99,10 @@ table
 
 ```
 
-
 # Graph 1 - Frequency of Travel Insurance
-- we still need to add info here! 
+
+-   we still need to add info here!
+
 ```{r}
 # Graph 4 - Histogram of Age
 ggplot(data, aes(x = factor(Age))) +
@@ -92,9 +111,9 @@ ggplot(data, aes(x = factor(Age))) +
   
 ```
 
-
 # Graph 2 - Density Plot of Income
-- we still need to add info here! 
+
+-   we still need to add info here!
 
 ```{r}
 ggplot(data, aes(x = AnnualIncome)) +
@@ -103,9 +122,10 @@ ggplot(data, aes(x = AnnualIncome)) +
   
 ```
 
+# Graph 3 - Bar Plot of Frequent Flyer by age
 
-# Graph 3 - Bar Plot of Frequent Flyer by age 
-- we still need to add info here!
+-   we still need to add info here!
+
 ```{r}
 # grouped bar chart
 frequentFlyerStatus <- c("Yes" = "red", "No" = "blue")
@@ -116,9 +136,11 @@ ggplot(data, aes(x = Age, fill = FrequentFlyer)) +
 ```
 
 # Graph 4 - Sector/Income
-- We can see how the income is distributed by Employment Type (Goverment vs Private).
 
-- We can see that the income is slightly higher in the private sector.
+-   We can see how the income is distributed by Employment Type (Goverment vs Private).
+
+-   We can see that the income is slightly higher in the private sector.
+
 ```{r include=TRUE}
 ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD, fill = Employment.Type)) +
   geom_boxplot() +
@@ -132,21 +154,19 @@ ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD, fill = Employment.Typ
 
 ```
 
-
-
-
-
 # Graph 5 - Age/Income
-Age and income is a cool graph to see. We can see how income is distributed by age.
-- Generally it is believed that income increases with age. 
-- Peak around 40-50 since that is when people are at their peak in their careers.
 
-## What does the data tell us 
-- There is not a big difference in the age and the income that these people make. 
+Age and income is a cool graph to see. We can see how income is distributed by age. - Generally it is believed that income increases with age. - Peak around 40-50 since that is when people are at their peak in their careers.
 
-## By looking at a barplot for each age, 
-- There is a slight increase of people who buy insurance as they make more money. 
-- It is easier to tell in box plot compared to scatter plot.
+## What does the data tell us
+
+-   There is not a big difference in the age and the income that these people make.
+
+## By looking at a barplot for each age,
+
+-   There is a slight increase of people who buy insurance as they make more money.
+-   It is easier to tell in box plot compared to scatter plot.
+
 ```{r fig.width=8, fig.height=4}
 
 p = ggplot(data, aes(x = Age, y = AnnualIncomeUSD)) +
@@ -159,8 +179,7 @@ p = ggplot(data, aes(x = Age, y = AnnualIncomeUSD)) +
 p 
 ```
 
-
-## Age/Income as boxplot
+## Age/Income as box-plot
 
 ```{r  fig.width=8, fig.height=4}
 ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) + # Plot Age ( min-max) vs AnnualIncomeUSD with fill color as TravelInsurance
@@ -172,12 +191,3 @@ ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelI
   theme_light() +  
   theme(  plot.title = element_text(hjust = 0.5)  ) # Centers the plot title
 ```
-
-
-
-
-
-
-
-
-
