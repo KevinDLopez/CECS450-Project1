@@ -62,11 +62,14 @@ data = read.csv("./TravelInsurancePrediction.csv")
 library(flextable)
 
 display_table = function(data){
+  # Function to display a nice looking table using flextable. 
+  ## It applies a minimal theme (Shows the vertical and horizontal lines of the table).
+  ## https://ardata-fr.github.io/flextable-book/
   my_table <- head(data)  
   table = flextable(my_table)
   table = fontsize(table, size = 7, part = "all")
   table = align(table, align = "center", part = "all")
-  table = theme_box(table)  # Apply a predefined theme
+  table = theme_box(table)  # Apply a predefined theme ( Simple table )
   table = align(table, align = "center", part = "all")
   table = bold(table, part = "header")  # Bold text in header
   table = width(table, width = .7)
@@ -97,59 +100,97 @@ table
 ```
 
 # Graph 2 - Age/Income
-
+Age and income is a cool graph to see. We can see how income is distributed by age.
+- Generally it is believed that income increases with age. 
+- Peak around 40-50 since that is when people are at their peak in their careers.
+## What does the data tell us 
+- There is not a big difference in the age and the income that these people make. 
+## By looking at a barplot for each age, 
+- There is a slight increase of people who buy insurance as they make more money. 
+- It is easier to tell in box plot compared to scatter plot.
 ```{r fig.width=8, fig.height=4}
 library(ggplot2)
 library(reshape2)
 
 p = ggplot(data, aes(x = Age, y = AnnualIncomeUSD)) +
-  geom_point(aes(color = as.factor(TravelInsurance))) +  # Convert TravelInsurance to a factor for discrete color mapping
-  scale_x_continuous(breaks = seq(min(data$Age), max(data$Age), by = 1)) +  # Sets the x-axis breaks to increment by 1
-  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
+  geom_point(aes(color = as.factor(TravelInsurance))) +  # Convert TravelInsurance to a factor for  color mapping
+  scale_x_continuous(breaks = seq(min(data$Age), max(data$Age), by = 1)) +  # Sets the x-axis breaks to increment by 1 (Age) 
+  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and increment by 2k 
   scale_color_manual(values = c("0" = "black", "1" = "orange"), name = "Travel Insurance", labels=c("No ", "Yes")) +  # Sets custom colors for TravelInsurance and customizes legend title
-  labs(title = "Age vs Income",
-       x = "Age",
-       y = "Annual Income") + 
+  labs(title = "Age vs Income", x = "Age", y = "Annual Income") +  # Sets the title and label for x,y axis 
   theme_light()
-p
+p 
 ```
+
+
 
 # Graph 2 - Age/Income as boxplot
 
 ```{r  fig.width=8, fig.height=4}
-ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) +
+ggplot(data, aes(x = as.factor(Age), y = AnnualIncomeUSD, fill=as.factor(TravelInsurance)  )) + # Plot Age ( min-max) vs AnnualIncomeUSD with fill color as TravelInsurance
   geom_boxplot() +
-  labs(title = "Box Plot of Annual Income by Age",
-       x = "Age",
-       y = "Annual Income",
-       fill = "Travel\nInsurance"
-       ) + 
-  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +
+  labs(title = "Box Plot of Annual Income by Age", x = "Age", y = "Annual Income", fill = "Travel\nInsurance" ) + # Sets the title and label for x,y axis and legend title
+  scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) + # Formats the y-axis labels as dollars and increase by 2k 
   # change the text of legend title 
-    scale_fill_manual(values = c("0" = "gray", "1" = "green"),
-                    labels = c("No", "Yes")) +  # Sets custom colors and labels for the legend
+  scale_fill_manual(values = c("0" = "gray", "1" = "green"), labels = c("No", "Yes")) +  # Sets custom colors and labels for the legend
   theme_light() +  
-  theme( 
-        plot.title = element_text(hjust = 0.5),  # Centers the plot  
-       )
+  theme(  plot.title = element_text(hjust = 0.5)  ) # Centers the plot title
 ```
 
 # Graph 3 - Sector/Income
+- We can see how the income is distributed by Employment Type (Goverment vs Private).
+- We can see that the income is slightly higher in the private sector.
 
 ```{r include=TRUE}
-
 ggplot(data, aes(x = Employment.Type, y = AnnualIncomeUSD, fill = Employment.Type)) +
   geom_boxplot() +
-  labs(title = "Box Plot of Annual Income by Employment Type",
-       x = "Employment Type",
-       y = "Annual Income") + 
+  labs(title = "Box Plot of Annual Income by Employment Type", x = "Employment Type", y = "Annual Income") + # Sets the title and label for x,y axis
     scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
   theme_light() +  
   theme( 
-        legend.position = "none",  # Hides the legend as the fill color is self-explanatory
-        plot.title = element_text(hjust = 0.5),  # Centers the plot title
+        legend.position = "none",  # Hides the legend 
+        plot.title = element_text(hjust = 0.5),  # Center the plot title
        )  
 
 
 
 ```
+
+# Ever Travelled Abroad and anual income 
+#scatter plot 
+
+```{r include=TRUE}
+
+ggplot(data, aes(x = as.factor(EverTravelledAbroad), y = AnnualIncomeUSD ) ) +
+  geom_boxplot() +
+  labs(title = "Box Plot of Annual Income by Ever Travelled Abroad",
+       x = "Ever Travelled Abroad",
+       y = "Annual Income") + 
+    scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
+  theme_light() +  
+  theme( 
+        plot.title = element_text(hjust = 0.5),  # Centers the plot title
+       )
+```
+
+
+# Graph 4 - graduate or not and anual income 
+
+```{r include=TRUE}
+
+ggplot(data, aes(x = as.factor(GraduateOrNot), y = AnnualIncomeUSD,  ) ) +
+  geom_boxplot(fill = "blue", color = "red") +
+  labs(title = "Box Plot of Annual Income by Graduate or Not",
+       x = "Graduate or Not",
+       y = "Annual Income") + 
+    scale_y_continuous(labels = scales::dollar_format(), breaks = seq(from = min(data$AnnualIncomeUSD), to = max(data$AnnualIncomeUSD), by = 2000)) +  # Formats the y-axis labels as dollars and sets breaks
+  theme_light() +  
+  theme( 
+        plot.title = element_text(hjust = 0.5),  # Centers the plot title
+       )
+```
+
+
+
+
+
